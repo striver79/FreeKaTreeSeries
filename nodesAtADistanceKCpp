@@ -1,12 +1,10 @@
 class Solution {
-public:
-    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
-        unordered_map<TreeNode*, TreeNode*> parent_track; // node -> parent
-        unordered_map<TreeNode*, bool> visited;
+    void markParents(TreeNode* root, unordered_map<TreeNode*, TreeNode*> &parent_track, TreeNode* target) {
         queue<TreeNode*> queue;
         queue.push(root);
-        while(!queue.empty()) { /*First BFS to get a track of parent nodes*/
-            TreeNode* current = queue.front(); queue.pop();
+        while(!queue.empty()) { 
+            TreeNode* current = queue.front(); 
+            queue.pop();
             if(current->left) {
                 parent_track[current->left] = current;
                 queue.push(current->left);
@@ -16,6 +14,14 @@ public:
                 queue.push(current->right);
             }
         }
+    }
+public:
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        unordered_map<TreeNode*, TreeNode*> parent_track; // node -> parent
+        markParents(root, parent_track, target); 
+        
+        unordered_map<TreeNode*, bool> visited; 
+        queue<TreeNode*> queue;
         queue.push(target);
         visited[target] = true;
         int curr_level = 0;
