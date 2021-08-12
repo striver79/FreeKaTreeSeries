@@ -23,9 +23,9 @@ class Solution {
                 if(i==0) first = cur_id;
                 if(i==size-1) last = cur_id;
                 if(node.left != null)
-                    q.offer(new Pair(node.left, cur_id*2));
+                    q.offer(new Pair(node.left, cur_id*2+1));
                 if(node.right != null) 
-                    q.offer(new Pair(node.right, cur_id*2+1));
+                    q.offer(new Pair(node.right, cur_id*2+2));
             }
             ans = Math.max(ans, last-first+1);
         }
