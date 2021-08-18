@@ -1,16 +1,17 @@
 class Solution {
     public List<Integer> preorderTraversal(TreeNode root) {
-        List<Integer> preorder = new ArrayList<Integer>(); 
-        Queue<TreeNode> q = new LinkedList<TreeNode>(); 
-        q.offer(root);
+        List<Integer> preorder = new ArrayList<Integer>();
+        if(root == null) return preorder; 
+        Stack<TreeNode> q = new Stack<TreeNode>(); 
+        q.push(root);
         while(!q.isEmpty()){
-            root = q.poll();
+            root = q.pop();
             preorder.add(root.val); 
             if(root.right != null){
-                q.offer(root.right);
+                q.push(root.right);
             }
             if(root.left!= null){
-                q.offer(root.left);
+                q.push(root.left);
             }
         }
         return preorder; 
