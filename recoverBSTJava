@@ -14,48 +14,51 @@
  * }
  */
 class Solution {
-    private TreeNode first;
-    private TreeNode prev;
-    private TreeNode middle;
-    private TreeNode last; 
-    private void inorder(TreeNode root) {
-        if(root == null) return; 
+    private TreeNode getPointerPositions(TreeNode curr, TreeNode prev, TreeNode[] invalidNodes){
+        if(curr == null)
+            return prev;
+        if(curr.left != null)
+            prev = getPointerPositions(curr.left, prev, invalidNodes);
         
-        inorder(root.left);
+        //The main Business goes here
         
-        if (prev != null && (root.val < prev.val))
-        {
-           
-            // If this is first violation, mark these two nodes as
-            // 'first' and 'middle'
-            if ( first == null )
-            {
-                first = prev;
-                middle = root;
+        //if prev is not null and our current value is less than 
+        //the previous (inorder predecessor) value, then 
+        //we just found a violation
+        if(prev != null && curr.val < prev.val){
+            //if invalidNodes[0] is null i.e first is null, its our first violation
+            //so we set middle and first pointers
+            if(invalidNodes[0] == null){    
+                invalidNodes[0] = prev;
+                invalidNodes[1] = curr;
             }
- 
-            // If this is second violation, mark this node as last
-            else
-                last = root;
+            else    //else its our second violation so we set our last pointer i.e invalidNodes[2]
+                invalidNodes[2] = curr;
         }
- 
-        // Mark this node as previous
-        prev = root;
-        inorder(root.right); 
+        //set prev to current node
+        prev = curr;
+        
+        if(curr.right != null)
+            prev = getPointerPositions(curr.right, prev, invalidNodes);
+        return prev;
     }
+    
     public void recoverTree(TreeNode root) {
-        first = middle = last = null; 
-        prev = new TreeNode(Integer.MIN_VALUE); 
-        inorder(root);
-        if(first!=null && last!=null) {
-            int t = first.val;
-            first.val = last.val;
-            last.val = t; 
+        //Create an array of node pointers [first, middle, last] and intialise them to null
+        TreeNode[] invalidNodes = {null,null,null};
+        
+        getPointerPositions(root, null,invalidNodes);
+        
+        //CODE TO SWAP THE POINTER VALS
+        if(invalidNodes[2] == null){
+            int temp = invalidNodes[0].val;
+            invalidNodes[0].val = invalidNodes[1].val;
+            invalidNodes[1].val = temp;
         }
-        else if(first!=null && middle!=null)  {
-            int t = first.val;
-            first.val = middle.val;
-            middle.val = t; 
+        else{
+            int temp = invalidNodes[0].val;
+            invalidNodes[0].val = invalidNodes[2].val;
+            invalidNodes[2].val = temp;
         }
     }
    
