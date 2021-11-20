@@ -12,7 +12,7 @@ void reorder(BinaryTreeNode < int > * root) {
     if(child >= root->data) root->data = child; 
     else {
         if(root->left) root->left->data = root->data; 
-        else if(root->right) root->right->data = root->data; 
+        if(root->right) root->right->data = root->data; 
     }
     
     reorder(root->left); 
