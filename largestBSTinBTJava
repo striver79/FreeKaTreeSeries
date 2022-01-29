@@ -26,7 +26,7 @@ class Solution {
     private NodeValue largestBSTSubtreeHelper(TreeNode root) {
         // An empty tree is a BST of size 0.
         if (root == null) {
-            return new NodeValue(Integer.MAX_VALUE, Integer.MIN_VALUE, 0);
+            return new NodeValue(Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
         }
         
         // Get values from left and right subtree of current tree.
