@@ -2,20 +2,17 @@ class Solution {
 public:
     int widthOfBinaryTree(TreeNode* root) {
         if(!root)
-            return 0;
+            return 0;//no need for this condition as it is given that there will always be one node
         int ans = 0;
         queue<pair<TreeNode*, int>> q;
         q.push({root,0});
         while(!q.empty()){
             int size = q.size();
-            int mmin = q.front().second;    //to make the id starting from zero
-            int first,last;
+            int first = q.front().second,last = q.back().second;//last is the mmax index
             for(int i=0; i<size; i++){
-                int cur_id = q.front().second-mmin;
+                int cur_id = q.front().second-last;
                 TreeNode* node = q.front().first;
                 q.pop();
-                if(i==0) first = cur_id;
-                if(i==size-1) last = cur_id;
                 if(node->left)
                     q.push({node->left, cur_id*2+1});
                 if(node->right)
@@ -24,5 +21,36 @@ public:
             ans = max(ans, last-first+1);
         }
         return ans;
+    }
+};
+
+
+//More understandable code with 1 based indexing=>
+
+class Solution {
+public:
+    int widthOfBinaryTree(TreeNode* root) {
+        int size;
+        //Let's suppose all the nodes are stored in array like we did in heap sort in 1 based indexing
+        int minIndex,maxIndex,maxi = 1;
+        queue<pair<TreeNode*,int>> qu;//<Node,index>
+        qu.push(make_pair(root,0));
+        pair<TreeNode*,int> temp;
+        while(!qu.empty())
+        {
+            size = qu.size();
+            minIndex = qu.front().second;//min index at this level will be index of leftmost node at this level
+            maxIndex = qu.back().second;//max index at this level will be index of rightmost node at this level
+            while(size--)
+            {
+                temp = qu.front();
+                qu.pop();
+                if(temp.first->left) qu.push(make_pair(temp.first->left,2*(temp.second-maxIndex)));//index of left child is 2x(parent's index) {1 based indexing}
+                if(temp.first->right) qu.push(make_pair(temp.first->right,2*(temp.second-maxIndex)+1));//index of right child is 2x(parent's index) + 1 {1 based indexing}
+            }
+            maxi = max(maxi,maxIndex-minIndex+1);//number of nodes between minIndex and maxIndex including both
+        }
+        return maxi;
+        
     }
 };
