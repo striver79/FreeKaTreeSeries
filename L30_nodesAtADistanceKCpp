@@ -1,5 +1,5 @@
 class Solution {
-    void markParents(TreeNode* root, unordered_map<TreeNode*, TreeNode*> &parent_track, TreeNode* target) {
+    void markParents(TreeNode* root, unordered_map<TreeNode*, TreeNode*> &parent_track) {
         queue<TreeNode*> queue;
         queue.push(root);
         while(!queue.empty()) { 
@@ -18,7 +18,7 @@ class Solution {
 public:
     vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
         unordered_map<TreeNode*, TreeNode*> parent_track; // node -> parent
-        markParents(root, parent_track, target); 
+        markParents(root, parent_track); 
         
         unordered_map<TreeNode*, bool> visited; 
         queue<TreeNode*> queue;
